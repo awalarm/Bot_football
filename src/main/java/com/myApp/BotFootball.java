@@ -1,3 +1,5 @@
+package com.myApp;
+
 import lombok.SneakyThrows;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -15,6 +17,12 @@ import java.util.concurrent.TimeUnit;
 
 
 public class BotFootball extends TelegramLongPollingBot {
+
+    public static void main(String[] args) throws TelegramApiException {
+        BotFootball bot = new BotFootball();
+        TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+        telegramBotsApi.registerBot(bot);
+    }
     
     String fileName = "sum.txt";
     File pathFile = new File("./sum.txt");
@@ -89,11 +97,7 @@ public class BotFootball extends TelegramLongPollingBot {
         return "559077433:AAHlWXMBf7tYHWJhejSYTzbcXqVJOmoACt0";
     }
 
-    public static void main(String[] args) throws TelegramApiException {
-        BotFootball bot = new BotFootball();
-        TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-        telegramBotsApi.registerBot(bot);
-    }
+
 
 
 }
