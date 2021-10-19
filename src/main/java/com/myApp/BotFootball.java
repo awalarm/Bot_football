@@ -81,7 +81,7 @@ public class BotFootball extends TelegramLongPollingBot {
                 execute(
                     SendMessage.builder()
                     .chatId(message.getChatId().toString())
-                    .text("Записано на футбол: " + String.valueOf(sum))
+                    .text("Go to football: " + String.valueOf(sum))
                     .build());
             }
         }

@@ -64,17 +64,26 @@
                 </configuration>
             </plugin>
             <plugin>
-                <!-- Build an executable JAR -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>1.1.1</version>
                 <configuration>
-                    <archive>
-                        <manifest>
+                    <assembleDirectory>target</assembleDirectory>
+                    <programs>
+                        <program>
                             <mainClass>com.myApp.BotFootball</mainClass>
-                        </manifest>
-                    </archive>
+                            <name>telegramBot</name>
+                        </program>
+                    </programs>
                 </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assemble</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
