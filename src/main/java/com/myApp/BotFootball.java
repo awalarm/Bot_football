@@ -98,6 +98,7 @@ public class BotFootball extends TelegramLongPollingBot {
                         .chatId(message.getChatId().toString())
                         .text(userFirstName + ", хватит ставить минусы!!!")
                         .build());
+                return;
             }
 
             if (message.hasText() && plusPlayers > 0) {
