@@ -92,14 +92,7 @@ public class BotFootball extends TelegramLongPollingBot {
                 out.println(totalFootballers);
             }
 
-            if (linePlayerInList == -1) {
-                execute(
-                        SendMessage.builder()
-                        .chatId(message.getChatId().toString())
-                        .text(userFirstName + ", хватит ставить минусы!!!")
-                        .build());
-                return;
-            }
+
 
             if (message.hasText() && plusPlayers > 0) {
                 if (totalFootballers == 0) {
@@ -107,6 +100,12 @@ public class BotFootball extends TelegramLongPollingBot {
                             SendMessage.builder()
                             .chatId(message.getChatId().toString())
                             .text("На футбол никто не идет! ")
+                            .build());
+                } else if (linePlayerInList == -1) {
+                    execute(
+                            SendMessage.builder()
+                            .chatId(message.getChatId().toString())
+                            .text(userFirstName + ", хватит ставить минусы!!!")
                             .build());
                 } else {
                     execute(
