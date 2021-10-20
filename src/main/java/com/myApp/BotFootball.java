@@ -65,7 +65,7 @@ public class BotFootball extends TelegramLongPollingBot {
             Long userId = message.getFrom().getId();
             int plusPlayers = 0;
             // We remove the player if he changes his mind to play
-            int linePlayerInList = votingResult.searchRejectedPlayer(String.valueOf(userId));
+            int linePlayerInList = 0;
 
             for (int i = 0; i < text.length(); i++) {
                 if(text.charAt(i) == '+') {
@@ -73,6 +73,8 @@ public class BotFootball extends TelegramLongPollingBot {
                     totalFootballers++;
                     votingResult.addVotingResults(userId +", "+ plusPlayers);
                 }
+
+                linePlayerInList = votingResult.searchRejectedPlayer(String.valueOf(userId));
 
                 if(text.charAt(i) == '-') {
 
@@ -83,8 +85,8 @@ public class BotFootball extends TelegramLongPollingBot {
                         if (totalFootballers < 0) {
                             totalFootballers = 0;
                         }
-                        plusPlayers ++;
                     }
+                    plusPlayers ++;
                 }
             }
 
@@ -92,10 +94,8 @@ public class BotFootball extends TelegramLongPollingBot {
                 out.println(totalFootballers);
             }
 
-
-
             if (message.hasText() && plusPlayers > 0) {
-                if (totalFootballers == 0) {
+                if (totalFootballers == 0 && linePlayerInList != -1) {
                     execute(
                             SendMessage.builder()
                             .chatId(message.getChatId().toString())
@@ -111,7 +111,7 @@ public class BotFootball extends TelegramLongPollingBot {
                     execute(
                             SendMessage.builder()
                             .chatId(message.getChatId().toString())
-                            .text("На футбол идут: " + String.valueOf(totalFootballers) + " " + String.format(userFirstName))
+                            .text("На футбол идут: " + String.valueOf(totalFootballers))
                             .build());
                 }
             }

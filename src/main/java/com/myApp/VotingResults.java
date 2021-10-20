@@ -41,10 +41,6 @@ public class VotingResults  {
         CSVWriter writer = new CSVWriter(sw);
         writer.writeAll(allElements);
         writer.close();
-        //Read CSV line by line and use the string array as you want
-        for (String[] row : allElements) {
-            System.out.println(Arrays.toString(row));
-        }
     }
 
     @SneakyThrows
