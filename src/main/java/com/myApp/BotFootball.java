@@ -1,5 +1,6 @@
 package com.myApp;
 
+import au.com.bytecode.opencsv.CSVWriter;
 import lombok.SneakyThrows;
 
 import org.telegram.telegrambots.bots.*;
@@ -18,12 +19,16 @@ import java.util.concurrent.TimeUnit;
 
 public class BotFootball extends TelegramLongPollingBot {
 
+    @SneakyThrows
     public static void main(String[] args) throws TelegramApiException {
         BotFootball bot = new BotFootball();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
         telegramBotsApi.registerBot(bot);
+
     }
-    
+
+    VotingResults votingResult = new VotingResults();
+
     String fileName = "sum.txt";
     File pathFile = new File("./sum.txt");
     long lastModifiedDateFile = TimeUnit.MILLISECONDS.toDays(pathFile.lastModified());
@@ -48,41 +53,67 @@ public class BotFootball extends TelegramLongPollingBot {
         String readFile =  readUsingFiles(fileName).replace("\n", "").replace("\r", "");
 
 
-        Integer sum = Integer.valueOf(readFile);
-        if (sum < 0) {
-            sum = 0;
+        Integer totalFootballers = Integer.valueOf(readFile);
+        if (totalFootballers < 0) {
+            totalFootballers = 0;
         }
 
         if(update.hasMessage()){
             Message message = update.getMessage();
             String text = message.getText();
+            String userFirstName = message.getFrom().getFirstName();
+            Long userId = message.getFrom().getId();
             int plusPlayers = 0;
+            // We remove the player if he changes his mind to play
+            int linePlayerInList = votingResult.searchRejectedPlayer(String.valueOf(userId));
 
             for (int i = 0; i < text.length(); i++) {
                 if(text.charAt(i) == '+') {
                     plusPlayers ++;
-                    sum++;
+                    totalFootballers++;
+                    votingResult.addVotingResults(userId +", "+ plusPlayers);
                 }
 
                 if(text.charAt(i) == '-') {
-                    sum--;
-                    if (sum < 0) {
-                        sum = 0;
+
+                    if (linePlayerInList != -1) {
+                        votingResult.deletePlayer(linePlayerInList);
+
+                        totalFootballers--;
+                        if (totalFootballers < 0) {
+                            totalFootballers = 0;
+                        }
+                        plusPlayers ++;
                     }
-                    plusPlayers ++;
                 }
             }
 
             try (PrintWriter out = new PrintWriter(fileName)) {
-                out.println(sum);
+                out.println(totalFootballers);
+            }
+
+            if (linePlayerInList == -1) {
+                execute(
+                        SendMessage.builder()
+                        .chatId(message.getChatId().toString())
+                        .text(userFirstName + ", хватит ставить минусы!!!")
+                        .build());
             }
 
             if (message.hasText() && plusPlayers > 0) {
-                execute(
-                    SendMessage.builder()
-                    .chatId(message.getChatId().toString())
-                    .text("Go to football: " + String.valueOf(sum))
-                    .build());
+                if (totalFootballers == 0) {
+                    execute(
+                            SendMessage.builder()
+                            .chatId(message.getChatId().toString())
+                            .text("На футбол никто не идет! ")
+                            .build());
+                } else {
+                    execute(
+                            SendMessage.builder()
+                            .chatId(message.getChatId().toString())
+                            .text("На футбол идут: " + String.valueOf(totalFootballers) + " " + String.format(userFirstName))
+                            .build());
+                }
             }
         }
     }
@@ -100,9 +131,5 @@ public class BotFootball extends TelegramLongPollingBot {
     public String getBotToken() {
         return BOT_TOKEN;
     }
-
-
-
-
 }
 
