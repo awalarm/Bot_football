@@ -11,20 +11,18 @@ import java.util.List;
 
 public class VotingResults  {
 
-    public void createdVotingList() throws Exception    {
-        String csv = "data.csv";
-        CSVWriter writer = new CSVWriter(new FileWriter(csv));
-        //Create record
-        String [] record = "Итого, 0".split(",");
-        //Write the record to file
-        writer.writeNext(record);
-        //close the writer
-        writer.close();
+    private String csv = "data.csv";
+
+    public String getCsv() {
+        return csv;
+    }
+
+    public void setCsv(String csv) {
+        this.csv = csv;
     }
 
     public void addVotingResults(String voting) throws Exception {
-        String csv = "data.csv";
-        CSVWriter writer = new CSVWriter(new FileWriter(csv, true));
+        CSVWriter writer = new CSVWriter(new FileWriter(getCsv(), true));
         String [] record = voting.split(",");
         writer.writeNext(record);
         writer.close();
@@ -32,12 +30,11 @@ public class VotingResults  {
 
     @SneakyThrows
     public void deletePlayer(int lineIndex) {
-        String csv = "data.csv";
         //Build reader instance
-        CSVReader reader2 = new CSVReader(new FileReader(csv));
+        CSVReader reader2 = new CSVReader(new FileReader(getCsv()));
         List<String[]> allElements = reader2.readAll();
         allElements.remove(lineIndex);
-        FileWriter sw = new FileWriter(csv);
+        FileWriter sw = new FileWriter(getCsv());
         CSVWriter writer = new CSVWriter(sw);
         writer.writeAll(allElements);
         writer.close();
@@ -52,7 +49,6 @@ public class VotingResults  {
         while ((nextLine = reader.readNext()) != null) {
             if (nextLine != null) {
                 //Verifying the read data here
-
                 if (nextLine[0].equals(idPlayer)){
                     return line;
                 }

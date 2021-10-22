@@ -1,6 +1,5 @@
 package com.myApp;
 
-import au.com.bytecode.opencsv.CSVWriter;
 import lombok.SneakyThrows;
 
 import org.telegram.telegrambots.bots.*;
@@ -8,7 +7,6 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 import java.io.*;
@@ -20,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class BotFootball extends TelegramLongPollingBot {
 
     @SneakyThrows
-    public static void main(String[] args) throws TelegramApiException {
+    public static void main(String[] args) {
         BotFootball bot = new BotFootball();
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
         telegramBotsApi.registerBot(bot);
@@ -111,7 +109,7 @@ public class BotFootball extends TelegramLongPollingBot {
                     execute(
                             SendMessage.builder()
                             .chatId(message.getChatId().toString())
-                            .text("На футбол идут: " + String.valueOf(totalFootballers))
+                            .text("На футбол идут: " + totalFootballers)
                             .build());
                 }
             }
@@ -122,14 +120,16 @@ public class BotFootball extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return BOT_NAME;
+//        return BOT_NAME;
+        return "@FreebiecomeBot";
     }
 
     private static final String BOT_TOKEN = System.getenv("TOKEN");
 
     @Override
     public String getBotToken() {
-        return BOT_TOKEN;
+//        return BOT_TOKEN;
+        return "559077433:AAFlqYtfw2WVdRJJWJp4DgYi6OuuOudJTtY";
     }
 }
 
