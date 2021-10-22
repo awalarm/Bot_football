@@ -120,16 +120,14 @@ public class BotFootball extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-//        return BOT_NAME;
-        return "@FreebiecomeBot";
+        return BOT_NAME;
     }
 
     private static final String BOT_TOKEN = System.getenv("TOKEN");
 
     @Override
     public String getBotToken() {
-//        return BOT_TOKEN;
-        return "559077433:AAFlqYtfw2WVdRJJWJp4DgYi6OuuOudJTtY";
+        return BOT_TOKEN;
     }
 }
 
